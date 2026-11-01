@@ -1,0 +1,16 @@
+{
+  "name": "cataku",
+  "version": "1.0.0",
+  "description": "Cataku - aplikasi pencatat tugas kuliah (Express + MySQL) untuk praktikum Komputasi Awan",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "mysql2": "^3.11.5"
+  }
+}

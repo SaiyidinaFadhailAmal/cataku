@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cataku - Catatan Tugas Kuliah</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Cataku</h1>
+    <p>Catatan tugas kuliah yang berjalan di Docker &amp; Azure VM</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2 id="judul-form">Tambah Tugas</h2>
+      <form id="form-tugas" autocomplete="off">
+        <input type="hidden" id="id">
+        <label>Judul tugas
+          <input type="text" id="judul" maxlength="150" required>
+        </label>
+        <label>Mata kuliah
+          <input type="text" id="mata_kuliah" maxlength="100" required>
+        </label>
+        <label>Deadline
+          <input type="date" id="deadline" required>
+        </label>
+        <div class="aksi">
+          <button type="submit" id="btn-simpan">Simpan</button>
+          <button type="button" id="btn-batal" class="sekunder" hidden>Batal</button>
+        </div>
+        <p id="pesan" role="alert"></p>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Daftar Tugas <span id="jumlah"></span></h2>
+      <div class="tabel-wrap">
+        <table>
+          <thead>
+            <tr><th>Status</th><th>Judul</th><th>Mata Kuliah</th><th>Deadline</th><th>Aksi</th></tr>
+          </thead>
+          <tbody id="daftar"></tbody>
+        </table>
+      </div>
+      <p id="kosong" hidden>Belum ada tugas yang dicatat.</p>
+    </section>
+  </main>
+
+  <footer>Cataku v1.0 &middot; Praktikum Komputasi Awan</footer>
+  <script src="app.js"></script>
+</body>
+</html>

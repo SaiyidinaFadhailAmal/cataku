@@ -1,0 +1,64 @@
+name: cataku
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: cataku-app:1.0
+    container_name: cataku-app
+    restart: unless-stopped
+    init: true
+    ports:
+      - "0.0.0.0:80:3000"
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      DB_HOST: db
+      DB_PORT: "3306"
+      DB_DATABASE: ${DB_DATABASE:?DB_DATABASE wajib diisi di .env}
+      DB_USERNAME: ${DB_USERNAME:?DB_USERNAME wajib diisi di .env}
+      DB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD wajib diisi di .env}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - frontend
+      - backend
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  db:
+    image: mysql:8.4
+    container_name: cataku-db
+    restart: unless-stopped
+    # Tidak ada bagian "ports": database tidak dapat diakses dari luar VM.
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD wajib diisi di .env}
+      MYSQL_DATABASE: ${DB_DATABASE:?DB_DATABASE wajib diisi di .env}
+      MYSQL_USER: ${DB_USERNAME:?DB_USERNAME wajib diisi di .env}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD wajib diisi di .env}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+    internal: true
+
+volumes:
+  mysql_data:
